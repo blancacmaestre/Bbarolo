@@ -107,6 +107,7 @@ class Param(object):
 
     def add_params_opts(self,**kwargs):
         """ Add new parameter to the parameter list from _opts variable"""
+        """ To the parameter list in C++ object """
         for key, value in kwargs.items():
             self.opts.update({key : value[0]})
     
@@ -120,6 +121,16 @@ class Param(object):
             f.write(self.__str__())
 
     def make_object(self):
+        """
+        Creates and initializes a parameter object for the current instance.
+
+        This method converts the current instance to a string representation,
+        deletes any previously defined parameters if they exist, sets new parameters
+        from the string representation, and marks the parameters as defined.
+
+        Raises:
+            Exception: If there is an error in setting the parameters.
+        """
         s = self.__str__()
         if self.paramDefined: libBB.Param_delete(self._params)
         libBB.Param_setfromstr(self._params,s.encode('utf-8'))
